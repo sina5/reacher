@@ -215,10 +215,12 @@ class DDPGAgent:
         ):
             self.memory.add(state, action, reward, next_state, done)
 
-        if len(self.memory) > self.batch_size and episode % self.update_every:
-            for _ in range(self.num_experiences):
-                experiences = self.memory.sample()
-                self.learn(experiences)
+        if (
+            len(self.memory) > self.batch_size
+        ):  # and episode % self.update_every:
+            # for _ in range(self.num_experiences):
+            experiences = self.memory.sample()
+            self.learn(experiences)
 
     def learn(self, experiences):
         states, actions, rewards, next_states, dones = experiences

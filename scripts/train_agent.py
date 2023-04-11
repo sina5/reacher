@@ -132,7 +132,7 @@ if __name__ == "__main__":
         agent,
         brain_name,
         env,
-        n_episodes=200,
+        n_episodes=2000,
         target_score=target_score,
         print_every=1,
     )
