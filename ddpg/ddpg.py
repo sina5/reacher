@@ -307,7 +307,7 @@ def ddpg(
 
         # eps = max(eps_end, eps_decay * eps)  # decrease epsilon
 
-        if i_episode % 1 == print_every:
+        if i_episode % print_every == 0:
             print(
                 "\rEpisode {}\tAverage Score: {:.2f}".format(
                     i_episode, np.mean(scores_window)
