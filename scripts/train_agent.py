@@ -134,7 +134,7 @@ if __name__ == "__main__":
         env,
         n_episodes=200,
         target_score=target_score,
-        print_every=5,
+        print_every=1,
     )
     plot_scores(avg_score_list, first_score_match, target_score)
     env.close()
