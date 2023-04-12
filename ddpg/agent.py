@@ -57,7 +57,7 @@ class DDPGAgent:
         )
         # self.update_every = update_every
         # self.num_experiences = num_experiences
-        torch.seed(seed)
+        torch.manual_seed(seed)
         if noise_type == "normal":
             self.noise = NormalNoise(action_size, seed)
         elif noise_type == "ou":

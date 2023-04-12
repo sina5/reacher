@@ -127,13 +127,14 @@ if __name__ == "__main__":
         state_size=state_size,
         action_size=action_size,
         seed=0,
+        noise_type="ou",
     )
     target_score = args.get("target_score", 30)
     avg_score_list, first_score_match = ddpg(
         agent,
         brain_name,
         env,
-        n_episodes=2000,
+        n_episodes=3000,
         target_score=target_score,
         print_every=1,
     )
