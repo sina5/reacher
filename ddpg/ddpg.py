@@ -87,6 +87,9 @@ class Critic(nn.Module):
         self.fc1.weight.data.uniform_(-3e-3, 3e-3)
         self.fc2.weight.data.uniform_(-3e-3, 3e-3)
         self.fc3.weight.data.uniform_(-3e-3, 3e-3)
+        self.fc4.weight.data.uniform_(-3e-3, 3e-3)
+        self.fc5.weight.data.uniform_(-3e-3, 3e-3)
+        self.fc6.weight.data.uniform_(-3e-3, 3e-3)
 
     def forward(self, state, action):
         xs = F.relu(self.fc1(state))
@@ -283,7 +286,6 @@ def ddpg(
     scores_window = deque(maxlen=100)  # last 100 scores
     checkpoint_path = None
     best_checkpoint_saved = False
-    score_list = []
     avg_score_list = []
     first_score_match = 0
     for i_episode in range(1, n_episodes + 1):
@@ -304,7 +306,6 @@ def ddpg(
                 break
 
         scores_window.append(scores)
-        score_list.append(np.mean(scores))
         avg_score_list.append(np.mean(scores_window))
 
         # eps = max(eps_end, eps_decay * eps)  # decrease epsilon
@@ -345,4 +346,4 @@ def ddpg(
                 agent.actor_local.state_dict(), f"actor_{checkpoint_path}"
             )
             print(f"Trained model weights saved to: {checkpoint_path}")
-    return score_list, avg_score_list, first_score_match
+    return avg_score_list, first_score_match

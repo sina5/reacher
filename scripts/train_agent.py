@@ -128,7 +128,7 @@ if __name__ == "__main__":
         seed=0,
     )
     target_score = args.get("target_score", 30)
-    score_list, avg_score_list, first_score_match = ddpg(
+    avg_score_list, first_score_match = ddpg(
         agent,
         brain_name,
         env,
