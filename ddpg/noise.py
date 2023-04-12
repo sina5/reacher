@@ -21,3 +21,15 @@ class OUNoise:
         ) + self.sigma * np.random.standard_normal(self.size)
         self.state = x + dx
         return self.state
+
+
+class NormalNoise:
+    def __init__(self, size, seed):
+        np.random.seed(seed)
+        self.size = size
+
+    def reset(self):
+        pass
+
+    def sample(self):
+        return np.random.normal(0, 0.1, size=self.size)

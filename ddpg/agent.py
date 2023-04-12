@@ -5,7 +5,7 @@ import torch
 import torch.nn.functional as F
 import torch.optim as optim
 from dmodels import Actor, Critic
-from noise import OUNoise
+from noise import NormalNoise, OUNoise
 from rbuffer import ReplayBuffer
 
 if torch.cuda.is_available():
@@ -32,6 +32,7 @@ class DDPGAgent:
         lr_actor=1e-4,
         lr_critic=1e-3,
         weight_decay=0,
+        noise_type="normal",
         # update_every=25,
         # num_experiences=15,
         seed=0,
@@ -56,7 +57,10 @@ class DDPGAgent:
         )
         # self.update_every = update_every
         # self.num_experiences = num_experiences
-        self.noise = OUNoise(action_size, seed)
+        if noise_type == "normal":
+            self.noise = NormalNoise(action_size, seed)
+        elif noise_type == "ou":
+            self.noise = OUNoise(action_size, seed)
 
     def act(self, state, add_noise=True):
         state = torch.from_numpy(state).float().to(device)
