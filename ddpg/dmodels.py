@@ -1,0 +1,84 @@
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+
+# Define actor network
+class Actor(nn.Module):
+    def __init__(
+        self,
+        state_size,
+        action_size,
+        seed,
+        fc1_units=256,
+        fc2_units=128,
+        fc3_units=64,
+        fc4_units=32,
+        fc5_units=16,
+    ):
+        super(Actor, self).__init__()
+        self.seed = torch.manual_seed(seed)
+        self.fc1 = nn.Linear(state_size, fc1_units)
+        self.fc2 = nn.Linear(fc1_units, fc2_units)
+        self.fc3 = nn.Linear(fc2_units, fc3_units)
+        self.fc4 = nn.Linear(fc3_units, fc4_units)
+        self.fc5 = nn.Linear(fc4_units, fc5_units)
+        self.fc6 = nn.Linear(fc5_units, action_size)
+        self.reset_parameters()
+
+    def reset_parameters(self):
+        self.fc1.weight.data.uniform_(-3e-3, 3e-3)
+        self.fc2.weight.data.uniform_(-3e-3, 3e-3)
+        self.fc3.weight.data.uniform_(-3e-3, 3e-3)
+        self.fc4.weight.data.uniform_(-3e-3, 3e-3)
+        self.fc5.weight.data.uniform_(-3e-3, 3e-3)
+        self.fc6.weight.data.uniform_(-3e-3, 3e-3)
+
+    def forward(self, state):
+        x = F.relu(self.fc1(state))
+        x = F.relu(self.fc2(x))
+        x = F.relu(self.fc3(x))
+        x = F.relu(self.fc4(x))
+        x = F.relu(self.fc5(x))
+        return torch.tanh(self.fc6(x))
+
+
+# Define critic network
+class Critic(nn.Module):
+    def __init__(
+        self,
+        state_size,
+        action_size,
+        seed,
+        fc1_units=256,
+        fc2_units=128,
+        fc3_units=64,
+        fc4_units=32,
+        fc5_units=16,
+    ):
+        super(Critic, self).__init__()
+        self.seed = torch.manual_seed(seed)
+        self.fc1 = nn.Linear(state_size, fc1_units)
+        self.fc2 = nn.Linear(fc1_units + action_size, fc2_units)
+        self.fc3 = nn.Linear(fc2_units, fc3_units)
+        self.fc4 = nn.Linear(fc3_units, fc4_units)
+        self.fc5 = nn.Linear(fc4_units, fc5_units)
+        self.fc6 = nn.Linear(fc5_units, 1)
+        self.reset_parameters()
+
+    def reset_parameters(self):
+        self.fc1.weight.data.uniform_(-3e-3, 3e-3)
+        self.fc2.weight.data.uniform_(-3e-3, 3e-3)
+        self.fc3.weight.data.uniform_(-3e-3, 3e-3)
+        self.fc4.weight.data.uniform_(-3e-3, 3e-3)
+        self.fc5.weight.data.uniform_(-3e-3, 3e-3)
+        self.fc6.weight.data.uniform_(-3e-3, 3e-3)
+
+    def forward(self, state, action):
+        xs = F.relu(self.fc1(state))
+        x = torch.cat((xs, action), dim=1)
+        x = F.relu(self.fc2(x))
+        x = F.relu(self.fc3(x))
+        x = F.relu(self.fc4(x))
+        x = F.relu(self.fc5(x))
+        return self.fc6(x)

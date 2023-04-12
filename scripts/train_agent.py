@@ -9,9 +9,10 @@ from typing import List
 
 import numpy as np
 import plotly.graph_objects as go
+from agent import DDPGAgent
 from unityagents import UnityEnvironment
 
-from ddpg import DDPGAgent, ddpg
+from ddpg import ddpg
 
 
 def parse_args():
