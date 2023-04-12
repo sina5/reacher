@@ -1,6 +1,13 @@
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+
+
+def hidden_init(layer):
+    fan_in = layer.weight.data.size()[0]
+    lim = 1.0 / np.sqrt(fan_in)
+    return (-lim, lim)
 
 
 # Define actor network
@@ -27,11 +34,11 @@ class Actor(nn.Module):
         self.reset_parameters()
 
     def reset_parameters(self):
-        self.fc1.weight.data.uniform_(-3e-3, 3e-3)
-        self.fc2.weight.data.uniform_(-3e-3, 3e-3)
-        self.fc3.weight.data.uniform_(-3e-3, 3e-3)
-        self.fc4.weight.data.uniform_(-3e-3, 3e-3)
-        self.fc5.weight.data.uniform_(-3e-3, 3e-3)
+        self.fc1.weight.data.uniform_(*hidden_init(self.fc1))
+        self.fc2.weight.data.uniform_(*hidden_init(self.fc2))
+        self.fc3.weight.data.uniform_(*hidden_init(self.fc3))
+        self.fc4.weight.data.uniform_(*hidden_init(self.fc4))
+        self.fc5.weight.data.uniform_(*hidden_init(self.fc5))
         self.fc6.weight.data.uniform_(-3e-3, 3e-3)
 
     def forward(self, state):
@@ -67,11 +74,11 @@ class Critic(nn.Module):
         self.reset_parameters()
 
     def reset_parameters(self):
-        self.fc1.weight.data.uniform_(-3e-3, 3e-3)
-        self.fc2.weight.data.uniform_(-3e-3, 3e-3)
-        self.fc3.weight.data.uniform_(-3e-3, 3e-3)
-        self.fc4.weight.data.uniform_(-3e-3, 3e-3)
-        self.fc5.weight.data.uniform_(-3e-3, 3e-3)
+        self.fc1.weight.data.uniform_(*hidden_init(self.fc1))
+        self.fc2.weight.data.uniform_(*hidden_init(self.fc2))
+        self.fc3.weight.data.uniform_(*hidden_init(self.fc3))
+        self.fc4.weight.data.uniform_(*hidden_init(self.fc4))
+        self.fc5.weight.data.uniform_(*hidden_init(self.fc5))
         self.fc6.weight.data.uniform_(-3e-3, 3e-3)
 
     def forward(self, state, action):

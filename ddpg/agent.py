@@ -57,6 +57,7 @@ class DDPGAgent:
         )
         # self.update_every = update_every
         # self.num_experiences = num_experiences
+        torch.seed(seed)
         if noise_type == "normal":
             self.noise = NormalNoise(action_size, seed)
         elif noise_type == "ou":
@@ -106,7 +107,7 @@ class DDPGAgent:
         critic_loss = F.mse_loss(Q_expected, Q_targets)
         self.critic_optimizer.zero_grad()
         critic_loss.backward()
-        torch.nn.utils.clip_grad_norm_(self.critic_local.parameters(), 1)
+        # torch.nn.utils.clip_grad_norm_(self.critic_local.parameters(), 1)
         self.critic_optimizer.step()
 
         # Update actor
