@@ -75,7 +75,7 @@ def ddpg(
                 print(f"Trained model weights saved to: {checkpoint_path}")
                 best_checkpoint_saved = True
                 first_score_match = i_episode
-            break
+            # break
         if i_episode == n_episodes:
             checkpoint_path = f"checkpoint_{i_episode}.pth"
             torch.save(

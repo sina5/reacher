@@ -9,9 +9,8 @@ from distutils.version import StrictVersion
 
 import numpy as np
 import torch
+from agent import DDPGAgent
 from unityagents import UnityEnvironment
-
-from ddpg import DDPGAgent
 
 
 def parse_args():
@@ -20,10 +19,17 @@ def parse_args():
         description="Tests a trained RL Reacher agent",
     )
     parser.add_argument(
-        "-c",
-        "--checkpoint-file",
+        "-a",
+        "--actor-checkpoint-file",
         type=str,
-        help="Path to a trained Pytorch model checkpoint",
+        help="Path to a trained actor Pytorch model checkpoint",
+        default="../checkpoints/checkpoint_481.pth",
+    )
+    parser.add_argument(
+        "-c",
+        "--critic-checkpoint-file",
+        type=str,
+        help="Path to a trained critic Pytorch model checkpoint",
         default="../checkpoints/checkpoint_481.pth",
     )
     parser.add_argument(
@@ -43,11 +49,9 @@ def start_unity_env(file_name, worker_id=10):
     brain = env.brains[brain_name]
     print(env.brain_names)
     # reset the environment
-    env_info = env.reset(train_mode=False)[brain_name]
-
+    env_info = env.reset(train_mode=True)[brain_name]
     # number of agents in the environment
     print("Number of agents:", len(env_info.agents))
-
     # number of actions
     action_size = brain.vector_action_space_size
     print("Number of actions:", action_size)
@@ -58,7 +62,6 @@ def start_unity_env(file_name, worker_id=10):
     return env, brain_name, state_size, action_size
 
 
-#### Updated
 def run_untrained_agent(env, brain_name):
     env_info = env.reset(train_mode=False)[brain_name]  # reset the environment
     states = env_info.vector_observations  # get the current state
@@ -81,34 +84,45 @@ def run_untrained_agent(env, brain_name):
     print("[-] Score: {}".format((np.mean(scores))))
 
 
-# def test_trained_agent(
-#     env, brain_name, check_point_path, state_size, action_size, seed=0
-# ):
+def test_trained_agent(
+    env,
+    brain_name,
+    actor_check_point_path,
+    critic_check_point_path,
+    state_size,
+    action_size,
+    seed=0,
+):
+    env_info = env.reset(train_mode=False)[brain_name]
+    states = env_info.vector_observations
+    num_agents = len(env_info.agents)  # get number of agents
+    scores = np.zeros(num_agents)  # initialize the score
+    agent = DDPGAgent(
+        state_size=state_size,
+        action_size=action_size,
+        seed=seed,
+    )
 
-#     agent = Agent(
-#         state_size=state_size,
-#         action_size=action_size,
-#         seed=seed,
-#     )
+    if os.path.exists(actor_check_point_path) and os.path.exists(
+        critic_check_point_path
+    ):
+        agent.actor_local.load_state_dict(torch.load(actor_check_point_path))
+        agent.critic_local.load_state_dict(torch.load(critic_check_point_path))
 
-#     if os.path.exists(check_point_path):
-#         agent.qnetwork_local.load_state_dict(torch.load(check_point_path))
+    agent.reset()
 
-#     score = 0  # initialize the score
-#     env_info = env.reset(train_mode=False)[brain_name]
-#     state = env_info.vector_observations[0]
-#     for i in range(3000):
-#         action = agent.act(state)
-#         env.step(action)
-#         env_info = env.step(action)[brain_name]
-#         state = env_info.vector_observations[0]
-#         reward = env_info.rewards[0]
-#         score += reward  # update the score
-#         done = env_info.local_done[0]
-#         if done:
-#             break
+    for i in range(3000):
+        action = agent.act(states)
+        env.step(action)
+        env_info = env.step(action)[brain_name]
+        states = env_info.vector_observations
+        rewards = env_info.rewards
+        scores += rewards  # update the score
+        done = env_info.local_done
+        if done:
+            break
 
-#     print("[-] Score: {}".format(score))
+    print("[-] Score: {}".format(np.mean(scores)))
 
 
 if __name__ == "__main__":
@@ -123,11 +137,14 @@ if __name__ == "__main__":
     print("[>] Try untrained reacher agents.")
     run_untrained_agent(env, brain_name)
 
-    # cf = args.get("checkpoint_file", "")
-    # if os.path.exists(cf):
-    #     print("[>] Try a trained DQN agent to collect bananas.")
-    #     test_trained_agent(env, brain_name, cf, state_size, action_size)
-    # else:
-    #     raise FileNotFoundError
+    actor_cf = args.get("actor_checkpoint_file", "")
+    critic_cf = args.get("critic_checkpoint_file", "")
+    if os.path.exists(actor_cf) and os.path.exists(critic_cf):
+        print("[>] Try a trained DDPG agent to reach balloons.")
+        test_trained_agent(
+            env, brain_name, actor_cf, critic_cf, state_size, action_size
+        )
+    else:
+        raise FileNotFoundError
 
     env.close()
