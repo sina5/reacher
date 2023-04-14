@@ -23,14 +23,14 @@ def parse_args():
         "--actor-checkpoint-file",
         type=str,
         help="Path to a trained actor Pytorch model checkpoint",
-        default="../checkpoints/checkpoint_481.pth",
+        default="../checkpoints/actor_checkpoint_128.pth",
     )
     parser.add_argument(
         "-c",
         "--critic-checkpoint-file",
         type=str,
         help="Path to a trained critic Pytorch model checkpoint",
-        default="../checkpoints/checkpoint_481.pth",
+        default="../checkpoints/critic_checkpoint_128.pth",
     )
     parser.add_argument(
         "-u",
@@ -67,7 +67,7 @@ def run_untrained_agent(env, brain_name):
     states = env_info.vector_observations  # get the current state
     num_agents = len(env_info.agents)  # get number of agents
     scores = np.zeros(num_agents)  # initialize the score
-    while True:
+    for _ in range(5000):
         actions = np.random.randn(num_agents, action_size)  # select an action
         actions = np.clip(actions, -1, 1)  # all actions between -1 and 1
         env_info = env.step(actions)[
@@ -111,15 +111,16 @@ def test_trained_agent(
 
     agent.reset()
 
-    for i in range(3000):
-        action = agent.act(states)
-        env.step(action)
-        env_info = env.step(action)[brain_name]
-        states = env_info.vector_observations
-        rewards = env_info.rewards
+    for _ in range(5000):
+        actions = agent.act(states)
+        env.step(actions)[brain_name]  # send the action to the environment
+        env_info = env.step(actions)[brain_name]
+        next_states = env_info.vector_observations  # get the next state
+        rewards = env_info.rewards  # get the reward
+        done = env_info.local_done  # see if episode has finished
         scores += rewards  # update the score
-        done = env_info.local_done
-        if done:
+        states = next_states  # roll over the state to next time step
+        if np.any(done):  # exit loop if episode finished
             break
 
     print("[-] Score: {}".format(np.mean(scores)))
