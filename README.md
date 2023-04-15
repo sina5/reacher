@@ -62,13 +62,16 @@ python train_agent.py --unity-app Reacher.app --target-score 30
 On my machine, the environment was solved in -- episodes:
 
 ```
-Episode 100     Average Score: 1.065
-Episode 200     Average Score: 4.18
-Episode 300     Average Score: 7.93
-Episode 400     Average Score: 11.20
-Episode 481     Average Score: 13.07
-Environment solved in 481 episodes!     Average Score: 13.07
-Trained model weights saved to: 
+Episode 95	Average Score: 29.26
+Episode 96	Average Score: 29.35
+Episode 97	Average Score: 29.43
+Episode 98	Average Score: 29.52
+Episode 99	Average Score: 29.61
+Episode 100	Average Score: 29.69
+Episode 101	Average Score: 30.08
+
+Environment solved in 101 episodes!	Average Score: 30.08
+Trained model weights saved to: checkpoint_101.pth
 ```
 
 [Saved Trained Actor Checkpoint](checkpoints/actor_checkpoint_101.pth)
