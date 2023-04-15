@@ -17,11 +17,11 @@ class Actor(nn.Module):
         state_size,
         action_size,
         seed,
-        fc1_units=256,
-        fc2_units=128,
-        fc3_units=64,
-        fc4_units=32,
-        fc5_units=16,
+        fc1_units=400,
+        fc2_units=300,
+        fc3_units=200,
+        fc4_units=100,
+        fc5_units=50,
     ):
         super(Actor, self).__init__()
         self.seed = torch.manual_seed(seed)
@@ -57,11 +57,11 @@ class Critic(nn.Module):
         state_size,
         action_size,
         seed,
-        fc1_units=256,
-        fc2_units=128,
-        fc3_units=64,
-        fc4_units=32,
-        fc5_units=16,
+        fc1_units=400,
+        fc2_units=300,
+        fc3_units=200,
+        fc4_units=100,
+        fc5_units=50,
     ):
         super(Critic, self).__init__()
         self.seed = torch.manual_seed(seed)

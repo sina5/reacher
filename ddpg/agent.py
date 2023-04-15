@@ -33,8 +33,7 @@ class DDPGAgent:
         lr_critic=1e-3,
         weight_decay=0,
         noise_type="normal",
-        # update_every=25,
-        # num_experiences=15,
+        update_every=1,
         seed=0,
     ):
         self.state_size = state_size
@@ -55,8 +54,7 @@ class DDPGAgent:
             lr=lr_critic,
             weight_decay=weight_decay,
         )
-        # self.update_every = update_every
-        # self.num_experiences = num_experiences
+        self.update_every = update_every
         torch.manual_seed(seed)
         if noise_type == "normal":
             self.noise = NormalNoise(action_size, seed)
@@ -83,10 +81,7 @@ class DDPGAgent:
         ):
             self.memory.add(state, action, reward, next_state, done)
 
-        if (
-            len(self.memory) > self.batch_size
-        ):  # and episode % self.update_every:
-            # for _ in range(self.num_experiences):
+        if len(self.memory) > self.batch_size and episode % self.update_every:
             experiences = self.memory.sample()
             self.learn(experiences)
 
@@ -97,17 +92,11 @@ class DDPGAgent:
         Q_targets_next = self.critic_target(
             next_states, self.actor_target(next_states)
         )
-        # Q_targets = rewards.reshape(-1, 1) + (
-        #     self.gamma
-        #     * Q_targets_next.reshape(-1, 1)
-        #     * (1 - dones.reshape(-1, 1))
-        # )
         Q_targets = rewards + (self.gamma * Q_targets_next * (1 - dones))
         Q_expected = self.critic_local(states, actions)
         critic_loss = F.mse_loss(Q_expected, Q_targets)
         self.critic_optimizer.zero_grad()
         critic_loss.backward()
-        # torch.nn.utils.clip_grad_norm_(self.critic_local.parameters(), 1)
         self.critic_optimizer.step()
 
         # Update actor
