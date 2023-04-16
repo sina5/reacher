@@ -92,6 +92,11 @@ cd scripts
 python test_agent.py --unity-app Reacher.app --actor-checkpoint-file ../checkpoints/actor_checkpoint_101.pth --critic-checkpoint-file ../checkpoints/critic_checkpoint_101.pth
 ```
 
+### Watch Youtube Video
+Click on below GIF animation to open youtube video:
+
+[![Watch the video](images/thumbnail.gif)](https://youtu.be/WXqnsGrODL4)
+
 ## Author
   - **Sina Fathi-Kazerooni** - 
     [Website](https://sinafathi.com)
