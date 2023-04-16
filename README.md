@@ -92,6 +92,10 @@ cd scripts
 python test_agent.py --unity-app Reacher.app --actor-checkpoint-file ../checkpoints/actor_checkpoint_101.pth --critic-checkpoint-file ../checkpoints/critic_checkpoint_101.pth
 ```
 
+Video of untrained and trained environments:
+
+{% include youtube.html id="WXqnsGrODL4" %}
+
 ## Author
   - **Sina Fathi-Kazerooni** - 
     [Website](https://sinafathi.com)
@@ -101,4 +105,4 @@ python test_agent.py --unity-app Reacher.app --actor-checkpoint-file ../checkpoi
 
 This project is open source under MIT License and free to use. It is for educational purposes only and provided as is.
 
-I have used parts of **DDPG_Pendulum** scripts in [Udacity DRL](https://github.com/udacity/deep-reinforcement-learning/) repo under [MIT License](https://github.com/udacity/deep-reinforcement-learning/blob/master/LICENSE). Scripts in [dqn](dqn) and [mlagents](mlagents) are based on [Udacity DRL](https://github.com/udacity/deep-reinforcement-learning/) repo with minor modifications.
+I have used parts of **DDPG_Pendulum** scripts in [Udacity DRL](https://github.com/udacity/deep-reinforcement-learning/) repo under [MIT License](https://github.com/udacity/deep-reinforcement-learning/blob/master/LICENSE). Scripts in [ddpg](ddpg) and [mlagents](mlagents) are based on [Udacity DRL](https://github.com/udacity/deep-reinforcement-learning/) repo with minor modifications.
