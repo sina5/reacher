@@ -1,3 +1,4 @@
+# based on https://github.com/udacity/deep-reinforcement-learning/blob/master/ddpg-pendulum/model.py
 import numpy as np
 import torch
 import torch.nn as nn
@@ -23,6 +24,19 @@ class Actor(nn.Module):
         fc4_units=100,
         fc5_units=50,
     ):
+        """Initialize parameters and build model.
+        Params
+        ======
+            state_size (int): Dimension of each state
+            action_size (int): Dimension of each action
+            seed (int): Random seed
+            fc1_units (int): Number of nodes in first hidden layer
+            fc2_units (int): Number of nodes in second hidden layer
+            fc3_units (int): Number of nodes in third hidden layer
+            fc4_units (int): Number of nodes in fourth hidden layer
+            fc5_units (int): Number of nodes in fifth hidden layer
+            fc6_units (int): Number of nodes in sixth hidden layer
+        """
         super(Actor, self).__init__()
         self.seed = torch.manual_seed(seed)
         self.fc1 = nn.Linear(state_size, fc1_units)
@@ -42,6 +56,7 @@ class Actor(nn.Module):
         self.fc6.weight.data.uniform_(-3e-3, 3e-3)
 
     def forward(self, state):
+        """Build an actor (policy) network that maps states -> actions."""
         x = F.relu(self.fc1(state))
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))
@@ -63,6 +78,19 @@ class Critic(nn.Module):
         fc4_units=100,
         fc5_units=50,
     ):
+        """Initialize parameters and build model.
+        Params
+        ======
+            state_size (int): Dimension of each state
+            action_size (int): Dimension of each action
+            seed (int): Random seed
+            fc1_units (int): Number of nodes in first hidden layer
+            fc2_units (int): Number of nodes in second hidden layer
+            fc3_units (int): Number of nodes in third hidden layer
+            fc4_units (int): Number of nodes in fourth hidden layer
+            fc5_units (int): Number of nodes in fifth hidden layer
+            fc6_units (int): Number of nodes in sixth hidden layer
+        """
         super(Critic, self).__init__()
         self.seed = torch.manual_seed(seed)
         self.fc1 = nn.Linear(state_size, fc1_units)
@@ -82,6 +110,7 @@ class Critic(nn.Module):
         self.fc6.weight.data.uniform_(-3e-3, 3e-3)
 
     def forward(self, state, action):
+        """Build a critic network that maps (state, action) pairs -> Q-values."""
         xs = F.relu(self.fc1(state))
         x = torch.cat((xs, action), dim=1)
         x = F.relu(self.fc2(x))

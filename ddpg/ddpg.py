@@ -13,14 +13,18 @@ def ddpg(
     target_score=30,
     print_every=100,
 ):
-    """DDPG Training.
+    """DDPG Model Training.
     Params
     ======
+        agent (DDPGAgent): Training agent
+        brain_name (str): Brain name to use in Unity env
+        env (UnityEnvironment): Environment for agents
         n_episodes (int): maximum number of training episodes
         max_t (int): maximum number of timesteps per episode
-        eps_start (float): starting value of epsilon, for epsilon-greedy action selection
-        eps_end (float): minimum value of epsilon
-        eps_decay (float): multiplicative factor (per episode) for decreasing epsilon
+        target_score (int): Target average score over 100 episodes
+            to reach and stop training.
+        print_every (int): interval to print average scores
+
     """
 
     scores_window = deque(maxlen=100)  # last 100 scores
@@ -48,8 +52,6 @@ def ddpg(
         scores_window.append(scores)
         avg_score_list.append(np.mean(scores_window))
 
-        # eps = max(eps_end, eps_decay * eps)  # decrease epsilon
-
         if i_episode % print_every == 0:
             print(
                 "\rEpisode {}\tAverage Score: {:.2f}".format(
@@ -75,7 +77,7 @@ def ddpg(
                 print(f"Trained model weights saved to: {checkpoint_path}")
                 best_checkpoint_saved = True
                 first_score_match = i_episode
-            # break
+            break
         if i_episode == n_episodes:
             checkpoint_path = f"checkpoint_{i_episode}.pth"
             torch.save(

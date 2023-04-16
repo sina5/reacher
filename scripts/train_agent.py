@@ -111,6 +111,8 @@ def plot_scores(
         paper_bgcolor="#ffffff",
     )
 
+    if not os.path.exists(os.path.dirname(output_file)):
+        os.makedirs(os.path.dirname(output_file))
     fig.write_image(output_file)
 
 
@@ -121,6 +123,7 @@ if __name__ == "__main__":
     if os.path.exists(ua):
         env, brain_name, state_size, action_size = start_unity_env(ua)
     else:
+        print("Cannot open the Unity environment!")
         raise FileNotFoundError
 
     agent = DDPGAgent(

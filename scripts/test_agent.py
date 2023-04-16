@@ -43,6 +43,17 @@ def parse_args():
 
 
 def start_unity_env(file_name, worker_id=10):
+    """Load a unity environement from disk
+
+    Args:
+        file_name (str): Path to unity environement on disk
+        worker_id (int, optional): Communications port
+            offset. Defaults to 10.
+
+    Returns:
+        tuple: A tuple of environment, barin name, state
+            dimensions, and actions dimensions.
+    """
     env = UnityEnvironment(file_name=file_name, worker_id=worker_id)
     # get the default brain
     brain_name = env.brain_names[0]
