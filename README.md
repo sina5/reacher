@@ -94,7 +94,7 @@ python test_agent.py --unity-app Reacher.app --actor-checkpoint-file ../checkpoi
 
 Video of untrained and trained environments:
 
-{% include youtube.html id="WXqnsGrODL4" %}
+{% include yt.html id="WXqnsGrODL4" %}
 
 ## Author
   - **Sina Fathi-Kazerooni** - 
