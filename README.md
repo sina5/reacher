@@ -31,7 +31,7 @@ python -m pip install -r requirements.txt
 ```
 
 
-### Download Unity Banana Collector
+### Download Unity Reacher
 The already built Unity environment for this project is accessible from following links:
 
 Linux: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/Reacher_Linux.zip)
