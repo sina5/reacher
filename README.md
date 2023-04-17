@@ -59,7 +59,7 @@ python train_agent.py --unity-app Reacher.app --target-score 30
 ```
 
 
-On my machine, the environment was solved in -- episodes:
+On my machine, the environment was solved in 101 episodes:
 
 ```
 Episode 95	Average Score: 29.26
