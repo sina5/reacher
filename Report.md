@@ -80,9 +80,9 @@ Replay buffer is a memory of different actions and environment trajectories. The
 
 In my first attempt, I used shallower networks for critic and actor. Those network consisted of 3 layers each. I also used a normal distribution for adding noise to actions. The model did not reach the desired score for 2000 episodes. 
 
-I increased the model networks by adding extra layers. The model scores improved a bit but did not reach the desired score for about 1000 episodes.
+I increased the model networks sizes by adding extra layers. The model scores improved a bit but did not reach the desired score for about 1000 episodes.
 
-I changed the noise to Ornstein Uhlenbeck process. The model was trained for 101 episodes to pass the score of 30 on average for all agents over pas 100 episodes.
+I changed the noise to Ornstein Uhlenbeck process. The model was trained for 101 episodes to pass the score of 30 on average for all agents over past 100 episodes.
 
 ## Results
 
